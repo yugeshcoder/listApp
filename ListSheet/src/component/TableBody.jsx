@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { toPng } from 'html-to-image'
 
 // feet array
 const feet = [];
@@ -24,7 +25,7 @@ while(i > 1.9){
 }
 
 
-const TableBody = () => {
+const TableBody = ({name}) => {
 
   const [q, setQ] = useState(2);
   const [model, setModel] = useState('');
@@ -55,161 +56,184 @@ const TableBody = () => {
     setMode((perv) => (perv === 'off' ? 'on' : 'off'));
   };
 
-  useEffect(() => {
-    
-  },[input]);
+  const appRef = useRef(null);
+
+  const saveAppAsImage = () => {
+    if (appRef.current === null) {
+      return;
+    }
+
+    toPng(appRef.current, { cacheBust: true })
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = name+" "+Date.now();
+        link.click();
+      })
+      .catch((err) => {
+        console.error('Something went wrong!', err);
+      });
+  };
+
+
+  useEffect(() => {},[input]);
   return(
     <>
-    <div className={mode}>
-      <div className="tableBody">
-        <div className="qModel">
-          <div>
-            <select id="q" value={q} onChange={(e) => setQ(e.target.value)}>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
+    <div ref={appRef} style={{backgroundColor: 'white'}}>
+      <div className={mode}>
+        <div className="tableBody">
+          <div className="qModel">
+            <div className="q">
+              <select id="q" value={q} onChange={(e) => setQ(e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
+            <div>
+              <input id="model" list="model1" value={model}
+              onChange={(e) => setModel(e.target.value)}/>
+              <datalist id="model1">
+              <option value='P_10_10'/>
+                <option value="P_1_6"/>
+                <option value="P_1_10"/>
+                <option value="P_35_6"/>
+                <option value="P_45_6"/>
+                <option value="P_35_10"/>
+                <option value="P_45_10"/>
+                <option value="pvc_18_18"/>
+                <option value="pvc_1_18"/>
+                <option value="AB_12_12"/>
+                <option value="AB_15_15"/>
+                <option value="AB_18_18"/>
+                <option value="AB_25_25"/>
+                <option value="AB_35_35"/>
+                <option value="AD_12_12"/>
+                <option value="AD_15_15"/>
+                <option value="AD_18_18"/>
+                <option value="CB_20_8"/>
+                <option value="CB_25_8"/>
+                <option value="CB_32_8"/>
+                <option value="CB_45_10"/>
+                <option value="AE_32_10"/>
+                <option value="AE_22_10"/>
+                <option value="AE_22_18"/>
+                <option value="AE_25_18"/>
+                <option value="AE_35_22"/>
+                <option value="AE_45_28"/>
+                <option value="Bundle"/>
+              </datalist>
+            </div>
           </div>
-          <div>
-            <input id="model" list="model1" value={model}
-            onChange={(e) => setModel(e.target.value)}/>
-            <datalist id="model1">
-            <option value='P_10_10'/>
-              <option value="P_1_6"/>
-              <option value="P_1_10"/>
-              <option value="P_35_6"/>
-              <option value="P_45_6"/>
-              <option value="P_35_10"/>
-              <option value="P_45_10"/>
-              <option value="pvc_18_18"/>
-              <option value="pvc_1_18"/>
-              <option value="AB_12_12"/>
-              <option value="AB_15_15"/>
-              <option value="AB_18_18"/>
-              <option value="AB_25_25"/>
-              <option value="AB_35_35"/>
-              <option value="AD_12_12"/>
-              <option value="AD_15_15"/>
-              <option value="AD_18_18"/>
-              <option value="CB_20_8"/>
-              <option value="CB_25_8"/>
-              <option value="CB_32_8"/>
-              <option value="CB_45_10"/>
-              <option value="AE_32_10"/>
-              <option value="AE_22_10"/>
-              <option value="AE_22_18"/>
-              <option value="AE_25_18"/>
-              <option value="AE_35_22"/>
-              <option value="AE_45_28"/>
-              <option value="Bundle"/>
-            </datalist>
-          </div>
-        </div>
-        <div className="table">
-          <table>
-            <thead>
-              <tr>
-                <th>Feet</th>
-                <th>Input</th>
-                <th>Piece</th>
-              </tr>
-            </thead>
-            <tbody>
-              {feet.map((foot, index) => (
-                <tr key={index}>
-                  <td>{foot}</td>
-                  <td>
-                    <input
-                      type="number"
-                      value={input[index] || ""}
-                      onBlur={(e) => handlePieceChange(index, e.target.value)}
-                      onChange={(e) => setInput((prev) => ({ ...prev, [index]: e.target.value }))}
-                    />
-                  </td>
-                  <td>{pieces[index]}</td>
+          <div className="table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Feet</th>
+                  <th>Input</th>
+                  <th>Piece</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <div id="footer">
-            <strong>Total Feet:</strong> {calculateTotalFeet() || 0}
+              </thead>
+              <tbody>
+                {feet.map((foot, index) => (
+                  <tr key={index}>
+                    <td>{foot}</td>
+                    <td>
+                      <input
+                        type="number"
+                        value={input[index] || ""}
+                        onBlur={(e) => handlePieceChange(index, e.target.value)}
+                        onChange={(e) => setInput((prev) => ({ ...prev, [index]: e.target.value }))}
+                      />
+                    </td>
+                    <td>{pieces[index]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div id="footer">
+              <strong>Total Feet:</strong> {calculateTotalFeet() || 0}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div className={imageMode}>
-    <div className="tableBody">
-        <div className="qModel">
-          <div>
-            <select id="q" value={q} onChange={(e) => setQ(e.target.value)}>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
+      <div className={imageMode}>
+      <div className="tableBody">
+          <div className="qModel">
+            <div className="q">
+              <select id="q" value={q} onChange={(e) => setQ(e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
+            <div>
+              <input id="model" list="model1" value={model}
+              onChange={(e) => setModel(e.target.value)}/>
+              <datalist id="model1">
+              <option value='P_10_10'/>
+                <option value="P_1_6"/>
+                <option value="P_1_10"/>
+                <option value="P_35_6"/>
+                <option value="P_45_6"/>
+                <option value="P_35_10"/>
+                <option value="P_45_10"/>
+                <option value="pvc_18_18"/>
+                <option value="pvc_1_18"/>
+                <option value="AB_12_12"/>
+                <option value="AB_15_15"/>
+                <option value="AB_18_18"/>
+                <option value="AB_25_25"/>
+                <option value="AB_35_35"/>
+                <option value="AD_12_12"/>
+                <option value="AD_15_15"/>
+                <option value="AD_18_18"/>
+                <option value="CB_20_8"/>
+                <option value="CB_25_8"/>
+                <option value="CB_32_8"/>
+                <option value="CB_45_10"/>
+                <option value="AE_32_10"/>
+                <option value="AE_22_10"/>
+                <option value="AE_22_18"/>
+                <option value="AE_25_18"/>
+                <option value="AE_35_22"/>
+                <option value="AE_45_28"/>
+                <option value="Bundle"/>
+              </datalist>
+            </div>
           </div>
-          <div>
-            <input id="model" list="model1" value={model}
-            onChange={(e) => setModel(e.target.value)}/>
-            <datalist id="model1">
-            <option value='P_10_10'/>
-              <option value="P_1_6"/>
-              <option value="P_1_10"/>
-              <option value="P_35_6"/>
-              <option value="P_45_6"/>
-              <option value="P_35_10"/>
-              <option value="P_45_10"/>
-              <option value="pvc_18_18"/>
-              <option value="pvc_1_18"/>
-              <option value="AB_12_12"/>
-              <option value="AB_15_15"/>
-              <option value="AB_18_18"/>
-              <option value="AB_25_25"/>
-              <option value="AB_35_35"/>
-              <option value="AD_12_12"/>
-              <option value="AD_15_15"/>
-              <option value="AD_18_18"/>
-              <option value="CB_20_8"/>
-              <option value="CB_25_8"/>
-              <option value="CB_32_8"/>
-              <option value="CB_45_10"/>
-              <option value="AE_32_10"/>
-              <option value="AE_22_10"/>
-              <option value="AE_22_18"/>
-              <option value="AE_25_18"/>
-              <option value="AE_35_22"/>
-              <option value="AE_45_28"/>
-              <option value="Bundle"/>
-            </datalist>
-          </div>
-        </div>
-        <div className="table">
-          <table>
-            <thead>
-              <tr>
-                <th>Feet</th>
-                <th>Pieces</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {feet.map((foot, index) => (
-                pieces[index] > 0 && (
-                <tr key={index}>
-                  <td>{foot}</td>
-                  <td>{pieces[index]}</td>
-                  <td>{feetCalc[index] * pieces[index]}</td>
+          <div className="table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Feet</th>
+                  <th>Pieces</th>
+                  <th>Total</th>
                 </tr>
-                )
-              ))}
-            </tbody>
-          </table>
-          <div id="footer">
-            <strong>Total Feet:</strong> {calculateTotalFeet() || 0}
+              </thead>
+              <tbody>
+                {feet.map((foot, index) => (
+                  pieces[index] > 0 && (
+                  <tr key={index}>
+                    <td>{foot}</td>
+                    <td>{pieces[index]}</td>
+                    <td>{feetCalc[index] * pieces[index]}</td>
+                  </tr>
+                  )
+                ))}
+              </tbody>
+            </table>
+            <div id="footer">
+              <strong>Total Feet:</strong> {calculateTotalFeet() || 0}
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div>
-      <button onClick={handleToggleImageMode}>Image mode</button>
-    </div>
+        <button onClick={handleToggleImageMode}>Image mode</button>
+      </div>
+    <div className='image'>
+        <button onClick={saveAppAsImage}>take pic</button>
+      </div>
     </>
   )
 }

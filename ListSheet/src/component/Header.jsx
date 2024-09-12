@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import TableBody from './TableBody.jsx'
 
 const Header = () => {
   const [date, setDate] = useState('');
@@ -13,7 +14,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="dateComp">
+      {/* <div className="dateComp">
         <div>
           <label htmlFor="comp">Company : </label>
           <select value={comp} onChange={(e) => setComp(e.target.value)}>
@@ -26,7 +27,7 @@ const Header = () => {
           <input id="date" type="date" value={date} 
           onChange={(e) => setDate(e.target.value)}/>
         </div>
-      </div>
+      </div> */}
       <div className="name">
           <label htmlFor="name">Name : </label>
           <input id="name" list="name1" value={name}
@@ -49,6 +50,7 @@ const Header = () => {
           </datalist>
           
         </div>
+        <TableBody name={name}/>
     </>
   )
 }
