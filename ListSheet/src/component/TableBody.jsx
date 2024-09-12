@@ -109,35 +109,14 @@ const TableBody = () => {
             <thead>
               <tr>
                 <th>Feet</th>
-                <th>Pieces</th>
-                <th>Total</th>
+                <th>Input</th>
+                <th>Piece</th>
               </tr>
             </thead>
             <tbody>
               {feet.map((foot, index) => (
                 <tr key={index}>
                   <td>{foot}</td>
-                  <td>{pieces[index]}</td>
-                  <td>{feetCalc[index] * pieces[index]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div id="footer">
-            <strong>Total Feet:</strong> {calculateTotalFeet() || 0}
-          </div>
-        </div>
-      </div>
-      <div className="input">
-        <table>
-          <thead>
-            <tr>
-              <th>input</th>
-            </tr>
-          </thead>
-          <tbody>
-          {feet.map((foot, index) => (
-                <tr key={index}>
                   <td>
                     <input
                       type="number"
@@ -146,10 +125,15 @@ const TableBody = () => {
                       onChange={(e) => setInput((prev) => ({ ...prev, [index]: e.target.value }))}
                     />
                   </td>
+                  <td>{pieces[index]}</td>
                 </tr>
               ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+          <div id="footer">
+            <strong>Total Feet:</strong> {calculateTotalFeet() || 0}
+          </div>
+        </div>
       </div>
     </div>
     <div className={imageMode}>
@@ -202,7 +186,7 @@ const TableBody = () => {
               <tr>
                 <th>Feet</th>
                 <th>Pieces</th>
-                <th>Feet</th>
+                <th>Total</th>
               </tr>
             </thead>
             <tbody>
