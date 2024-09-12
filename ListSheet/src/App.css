@@ -1,5 +1,9 @@
+body{
+  width: 320px;
+  margin: 0 auto;
+}
 #root {
-  max-width: 360px;
+  max-width: 300px;
   text-align: center;
   background-color: white;
   font-family: Arial, Helvetica, sans-serif;
@@ -12,7 +16,7 @@
 
 .dateComp{
   display: flex;
-  width: 360px;
+  width: 300px;
   justify-content: space-around;
   padding-bottom: 25px;
   padding-top: 10px;
@@ -36,7 +40,7 @@
 
 .name{
   display: flex;
-  width: 360px;
+  width: 300px;
   justify-content: center;
   padding-bottom: 25px;
 }
@@ -46,7 +50,7 @@
 }
 
 .off{
-  max-width: 360px;
+  max-width: 300px;
   display: flex;
   justify-content: center;
   box-sizing: border-box;
