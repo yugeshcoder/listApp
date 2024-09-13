@@ -93,13 +93,13 @@ const TableBody = ({name}) => {
               <input id="model" list="model1" value={model}
               onChange={(e) => setModel(e.target.value)}/>
               <datalist id="model1">
-              <option value='P_10_10'/>
-                <option value="P_1_6"/>
-                <option value="P_1_10"/>
-                <option value="P_35_6"/>
-                <option value="P_45_6"/>
-                <option value="P_35_10"/>
-                <option value="P_45_10"/>
+              <option value='10_10'/>
+                <option value="1_6"/>
+                <option value="1_10"/>
+                <option value="35_6"/>
+                <option value="45_6"/>
+                <option value="35_10"/>
+                <option value="45_10"/>
                 <option value="pvc_18_18"/>
                 <option value="pvc_1_18"/>
                 <option value="AB_12_12"/>
@@ -169,13 +169,13 @@ const TableBody = ({name}) => {
               <input id="model" list="model1" value={model}
               onChange={(e) => setModel(e.target.value)}/>
               <datalist id="model1">
-              <option value='P_10_10'/>
-                <option value="P_1_6"/>
-                <option value="P_1_10"/>
-                <option value="P_35_6"/>
-                <option value="P_45_6"/>
-                <option value="P_35_10"/>
-                <option value="P_45_10"/>
+              <option value='10_10'/>
+                <option value="1_6"/>
+                <option value="1_10"/>
+                <option value="35_6"/>
+                <option value="45_6"/>
+                <option value="35_10"/>
+                <option value="45_10"/>
                 <option value="pvc_18_18"/>
                 <option value="pvc_1_18"/>
                 <option value="AB_12_12"/>
